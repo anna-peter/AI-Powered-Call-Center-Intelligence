@@ -38,27 +38,19 @@ export async function getKeyPhrases(requestText) {
     }
 }
 
-export async function getGPT3CustomPromptCompletion(requestText, customPrompt) {      
+export async function getGPT3CustomPromptCompletion(requestText) {    
+    const insurancePrompt = '\n\n-----------------\n\nYou need to extract the relevant information from the conversation like the name and age of the person, car brand and model and annual mileage. If you do not have the information or any input, return nothing. Incorporate all knowledge you already have from the conversation and be very short and precise. If the information is not available, list the questions in bullet points to get the information. If you know the age of the person as well as the car brand and model and the annual mileage, say that you have everything you need but do not ask further questions.\n\nThe output should look as such:\n\nKey information\n- Name\n- Age\n- Car brand and model\n- annual mileage\n\n Open questions\n- question 1\n\n----------------\n\n';  
+    console.log(requestText);
+    //console.log(insurancePrompt);
     try{
+        
         //GPT-3 prompt completion
-        const data = {transcript: requestText, customPrompt: customPrompt};
+        const data = {transcript: requestText, customPrompt: insurancePrompt};
         const headers = { 'Content-Type': 'application/json' };
         const res = await axios.post('/openai/gpt/customPrompt', data, {headers});                
         return res;
     } catch (err) {       
-        return {data: "Error occured while invoking Azure OpenAI API, please try again" + err.message};
-    }
-}
-
-export async function getGPT3DiarizationPromptCompletion(requestText, customPrompt) {      
-    try{
-        //GPT-3 prompt completion
-        const data = {transcript: requestText, customPrompt: customPrompt};
-        const headers = { 'Content-Type': 'application/json' };
-        const res = await axios.post('/openai/gpt/DiarizationPrompt', data, {headers});                
-        return res;
-    } catch (err) {       
-        return {data: "Error occured while invoking Azure OpenAI API, please try again" + err.message};
+        return {data: "No data from GPT custom prompt competion"};
     }
 }
 
@@ -85,4 +77,3 @@ export async function getGPT3ParseExtractInfo(requestText, conversationScenario)
         return {data: "No data from GPT Parse extract info"};
     }
 }
-
